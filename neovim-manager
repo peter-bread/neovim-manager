@@ -2,6 +2,8 @@
 
 set -Eeuo pipefail
 
+# FIX: right now, options are treated as arguments
+
 # Utility functions ------------------------------------------------------------
 
 # Usage: OS=$(get_os)
@@ -49,7 +51,7 @@ SHARE="${XDG_DATA_HOME:-$HOME/.local/share}/neovim-manager"
 
 # this where the active build will be
 # need to ensure $ACTIVE/bin is in $PATH
-ACTIVE="$SHARE/nvim-active"
+ACTIVE="$SHARE/active"
 
 OS=$(get_os)
 ARCH=$(get_arch)
@@ -59,9 +61,10 @@ ARCH=$(get_arch)
 function _help() {
   echo "Manage Neovim installation."
   echo
-  echo "Usage: neovim-manager <command> [<args>]"
+  echo "Usage: neovim-manager <command> [<args>] [options]"
   echo
   echo "Commands:"
+  echo "  init        Set PATH accordingly"
   echo "  install     Install a Neovim build"
   echo "  help        Print this message"
   echo
@@ -69,10 +72,37 @@ function _help() {
   echo "  -h, -help, --help     Print this message"
 }
 
+function _help_init() {
+  echo "Make nvim available in PATH"
+  echo
+  echo "Usage: neovim-manager init [options]"
+  echo
+  echo "Options:"
+  echo "  -h, -help, --help, help     Print this message"
+  echo
+  echo
+  echo "In ~/.bashrc or ~/.zshrc:"
+  echo
+  echo '  eval "$(neovim-manager init)"'
+}
+
+function init() {
+
+  if [[ "${1:-}" =~ ^(help|-h|-help|--help)$ ]]; then
+    _help_init
+    return 0
+  fi
+
+  if ! [[ ":$PATH:" == *":${XDG_DATA_HOME:-$HOME/.local/share}/neovim-manager/active/bin:"* ]]; then
+    echo 'export PATH="${XDG_DATA_HOME:-$HOME/.local/share}/neovim-manager/active/bin:$PATH"'
+  fi
+
+}
+
 function _help_install() {
   echo "Install a build of Neovim."
   echo
-  echo "Usage: neovim-manager install [<build>]"
+  echo "Usage: neovim-manager install [<build>] [options]"
   echo
   echo "Builds:"
   echo "  stable      Latest stable release"
@@ -130,7 +160,7 @@ function install() {
 function _help_use() {
   echo "Use a build of Neovim."
   echo
-  echo "Usage: neovim-manager use <build>"
+  echo "Usage: neovim-manager use <build> [options]"
   echo
   echo "Builds:"
   echo "  stable      Latest stable release"
@@ -174,6 +204,10 @@ function main() {
   COMMAND=${1:-help}
 
   case "$COMMAND" in
+
+  init)
+    init "${2:-}"
+    ;;
 
   install)
     install "${2:-}"
