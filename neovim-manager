@@ -1,0 +1,150 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+# Utility functions ------------------------------------------------------------
+
+# Usage: OS=$(get_os)
+function get_os() {
+  case "$(uname -s)" in
+  *Linux*)
+    echo "linux"
+    return 0
+    ;;
+  *Darwin*)
+    echo "macos"
+    return 0
+    ;;
+  *)
+    echo "unknown or not supported" >&2
+    return 1
+    ;;
+  esac
+}
+
+# Usage: ARCH=$(get_arch)
+function get_arch() {
+  local arch
+  arch=$(uname -m)
+
+  case "$arch" in
+  x86_64 | arm64)
+    echo "$arch"
+    return 0
+    ;;
+  *)
+    echo "unknown or not supported" >&2
+    return 1
+    ;;
+  esac
+}
+
+# Set variables ----------------------------------------------------------------
+
+# URL to get tarballs from
+GITHUB_URL="https://github.com/neovim/neovim/releases/download"
+
+# this is where neovim tarballs will be extracted to
+SHARE="${XDG_DATA_HOME:-$HOME/.local/share}/neovim-manager"
+
+OS=$(get_os)
+ARCH=$(get_arch)
+
+# Commands ---------------------------------------------------------------------
+
+function _help() {
+  echo "Manage Neovim installation."
+  echo
+  echo "Usage: neovim-manager <command> [<args>]"
+  echo
+  echo "Commands:"
+  echo "  install     Install a Neovim build"
+  echo "  help        Print this message"
+  echo
+  echo "Options:"
+  echo "  -h, -help, --help     Print this message"
+}
+
+function _help_install() {
+  echo "Install a build of Neovim."
+  echo
+  echo "Usage: neovim-manager install [<build>]"
+  echo
+  echo "Builds:"
+  echo "  stable      Latest stable release"
+  echo "  nightly     Latest nightly release"
+  echo
+  echo "Options:"
+  echo "  -h, -help, --help, help     Print this message"
+  echo
+  echo "If a <build> is not supplied, neovim-manager will fallback to stable."
+}
+
+function install() {
+
+  local VERSION="${1:-stable}"          # stable | nightly
+  local FORMAT="tar.gz"                 # archive format (only tar.gz supported right now)
+  local NAME="nvim-$OS-$ARCH"           # name of asset w/o extension
+  local ARCHIVE="$NAME.$FORMAT"         # fullname of asset
+  local LOCATION="$SHARE/nvim-$VERSION" # install location
+
+  local ret=0
+
+  if [[ "$VERSION" != "stable" && "$VERSION" != "nightly" ]]; then
+    if ! [[ "$VERSION" =~ ^(help|-h|-help|--help)$ ]]; then
+      echo "Error: invalid build"
+      echo
+      ret=1
+    fi
+    _help_install
+    return "$ret"
+  fi
+
+  cd "$HOME"
+
+  # download tarball
+  wget --quiet "$GITHUB_URL/$VERSION/$ARCHIVE"
+
+  # TODO: checksums
+
+  # extract tarball
+  echo "Extracting files..."
+  tar xzvf "$ARCHIVE" &>/dev/null
+
+  mkdir -p "$SHARE"
+
+  # delete existing build
+  [[ -d "$LOCATION" ]] && rm -r "$LOCATION"
+
+  # move extracted files
+  mv "$NAME" "$LOCATION"
+
+  # delete tarball
+  rm "$ARCHIVE"
+}
+
+# Entry point ------------------------------------------------------------------
+
+function main() {
+
+  local COMMAND
+  COMMAND=${1:-help}
+
+  case "$COMMAND" in
+  install)
+    install "${2:-}"
+    ;;
+  help | -h | -help | --help)
+    _help
+    return 0
+    ;;
+  *)
+    echo "Error: invalid subcommand"
+    echo
+    _help
+    return 1
+    ;;
+  esac
+}
+
+main "$@"
