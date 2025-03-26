@@ -88,6 +88,7 @@ function _help_init() {
 
 function init() {
 
+  # NOTE: any other args are ignored
   if [[ "${1:-}" =~ ^(help|-h|-help|--help)$ ]]; then
     _help_init
     return 0
@@ -196,6 +197,46 @@ function use() {
   ln -sfn "$LOCATION" "$ACTIVE"
 }
 
+function _help_uninstall() {
+  echo "Uninstall a build of Neovim."
+  echo
+  echo "Usage: neovim-manager uninstall <build> [options]"
+  echo
+  echo "Builds:"
+  echo "  stable      Latest stable release"
+  echo "  nightly     Latest nightly release"
+  echo
+  echo "Options:"
+  echo "  -h, -help, --help, help     Print this message"
+}
+
+function uninstall() {
+  local VERSION=${1:-}
+
+  local ret=0
+
+  if [[ "$VERSION" != "stable" && "$VERSION" != "nightly" ]]; then
+    if ! [[ "$VERSION" =~ ^(help|-h|-help|--help)$ ]]; then
+      echo "Error: invalid build"
+      echo
+      ret=1
+    fi
+    _help_uninstall
+    return "$ret"
+  fi
+
+  local LOCATION="$SHARE/nvim-$VERSION"
+
+  if [[ -d $LOCATION ]]; then
+    rm -r "$LOCATION"
+    return 0
+  else
+    echo "nvim-$VERSION not installed."
+    return 1
+  fi
+
+}
+
 # Entry point ------------------------------------------------------------------
 
 function main() {
@@ -217,6 +258,10 @@ function main() {
     use "${2:-}"
     ;;
 
+  uninstall)
+    uninstall "${2:-}"
+    ;;
+
   help | -h | -help | --help)
     _help
     return 0
@@ -230,6 +275,7 @@ function main() {
     ;;
 
   esac
+
 }
 
 main "$@"
