@@ -66,6 +66,8 @@ function _help() {
   echo "Commands:"
   echo "  init        Set PATH accordingly"
   echo "  install     Install a Neovim build"
+  echo "  use         Use a Neovim build"
+  echo "  uninstall   Uninstall a Neovim build"
   echo "  help        Print this message"
   echo
   echo "Options:"
@@ -229,6 +231,7 @@ function uninstall() {
 
   if [[ -d $LOCATION ]]; then
     rm -r "$LOCATION"
+    # FIX: delete active symlink?
     return 0
   else
     echo "nvim-$VERSION not installed."
