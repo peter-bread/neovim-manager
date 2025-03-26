@@ -47,6 +47,10 @@ GITHUB_URL="https://github.com/neovim/neovim/releases/download"
 # this is where neovim tarballs will be extracted to
 SHARE="${XDG_DATA_HOME:-$HOME/.local/share}/neovim-manager"
 
+# this where the active build will be
+# need to ensure $ACTIVE/bin is in $PATH
+ACTIVE="$SHARE/nvim-active"
+
 OS=$(get_os)
 ARCH=$(get_arch)
 
@@ -123,6 +127,45 @@ function install() {
   rm "$ARCHIVE"
 }
 
+function _help_use() {
+  echo "Use a build of Neovim."
+  echo
+  echo "Usage: neovim-manager use <build>"
+  echo
+  echo "Builds:"
+  echo "  stable      Latest stable release"
+  echo "  nightly     Latest nightly release"
+  echo
+  echo "Options:"
+  echo "  -h, -help, --help, help     Print this message"
+}
+
+function use() {
+  local VERSION="${1:-}"
+
+  local ret=0
+
+  if [[ "$VERSION" != "stable" && "$VERSION" != "nightly" ]]; then
+    if ! [[ "$VERSION" =~ ^(help|-h|-help|--help)$ ]]; then
+      echo "Error: invalid build"
+      echo
+      ret=1
+    fi
+    _help_use
+    return "$ret"
+  fi
+
+  local LOCATION="$SHARE/nvim-$VERSION"
+
+  if [[ ! -d $LOCATION ]]; then
+    echo "Error: nvim-$VERSION is not installed."
+    # TODO: if requested build is not installed, prompt for install
+    return 1
+  fi
+
+  ln -sfn "$LOCATION" "$ACTIVE"
+}
+
 # Entry point ------------------------------------------------------------------
 
 function main() {
@@ -131,19 +174,27 @@ function main() {
   COMMAND=${1:-help}
 
   case "$COMMAND" in
+
   install)
     install "${2:-}"
     ;;
+
+  use)
+    use "${2:-}"
+    ;;
+
   help | -h | -help | --help)
     _help
     return 0
     ;;
+
   *)
     echo "Error: invalid subcommand"
     echo
     _help
     return 1
     ;;
+
   esac
 }
 
