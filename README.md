@@ -32,7 +32,7 @@ Initialise in shell. Add the following to your shell rc file:
 eval "$(neovim-manager init)"
 ```
 
-Install:
+Install (or update):
 
 ```sh
 neovim-manager install stable
