@@ -10,6 +10,20 @@ builds of Neovim.
 
 Download the script and make sure it is available in `PATH`.
 
+```sh
+wget https://raw.githubusercontent.com/peter-bread/neovim-manager/refs/heads/main/neovim-manager
+```
+
+Common locations:
+
+```sh
+mv neovim-manager ~/.local/bin
+```
+
+```sh
+sudo mv neovim-manager /usr/local/bin
+```
+
 ## Usage
 
 Initialise in shell. Add the following to your shell rc file:
