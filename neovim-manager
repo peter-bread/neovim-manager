@@ -230,9 +230,18 @@ function uninstall() {
   local LOCATION="$SHARE/nvim-$VERSION"
 
   if [[ -d $LOCATION ]]; then
+    echo "Uninstalling $VERSION"
     rm -r "$LOCATION"
-    # FIX: delete active symlink?
+
+    if [[ "$(readlink -f "$ACTIVE")" == "$LOCATION" ]]; then
+      echo "Unsetting active"
+      rm "$ACTIVE"
+
+      # TODO: auto switch to other version (if installed)
+    fi
+
     return 0
+
   else
     echo "nvim-$VERSION not installed."
     return 1
