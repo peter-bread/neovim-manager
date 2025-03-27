@@ -119,16 +119,16 @@ function _help_install() {
 
 function install() {
 
-  local VERSION="${1:-stable}"          # stable | nightly
-  local FORMAT="tar.gz"                 # archive format (only tar.gz supported right now)
-  local NAME="nvim-$OS-$ARCH"           # name of asset w/o extension
-  local ARCHIVE="$NAME.$FORMAT"         # fullname of asset
-  local LOCATION="$SHARE/nvim-$VERSION" # install location
+  local BUILD="${1:-stable}"          # stable | nightly
+  local FORMAT="tar.gz"               # archive format (only tar.gz supported right now)
+  local NAME="nvim-$OS-$ARCH"         # name of asset w/o extension
+  local ARCHIVE="$NAME.$FORMAT"       # fullname of asset
+  local LOCATION="$SHARE/nvim-$BUILD" # install location
 
   local ret=0
 
-  if [[ "$VERSION" != "stable" && "$VERSION" != "nightly" ]]; then
-    if ! [[ "$VERSION" =~ ^(help|-h|-help|--help)$ ]]; then
+  if [[ "$BUILD" != "stable" && "$BUILD" != "nightly" ]]; then
+    if ! [[ "$BUILD" =~ ^(help|-h|-help|--help)$ ]]; then
       echo "Error: invalid build"
       echo
       ret=1
@@ -140,7 +140,7 @@ function install() {
   cd "$HOME"
 
   # download tarball
-  wget --quiet "$GITHUB_URL/$VERSION/$ARCHIVE"
+  wget --quiet "$GITHUB_URL/$BUILD/$ARCHIVE"
 
   # TODO: checksums
 
@@ -174,12 +174,12 @@ function _help_use() {
 }
 
 function use() {
-  local VERSION="${1:-}"
+  local BUILD="${1:-}"
 
   local ret=0
 
-  if [[ "$VERSION" != "stable" && "$VERSION" != "nightly" ]]; then
-    if ! [[ "$VERSION" =~ ^(help|-h|-help|--help)$ ]]; then
+  if [[ "$BUILD" != "stable" && "$BUILD" != "nightly" ]]; then
+    if ! [[ "$BUILD" =~ ^(help|-h|-help|--help)$ ]]; then
       echo "Error: invalid build"
       echo
       ret=1
@@ -188,10 +188,10 @@ function use() {
     return "$ret"
   fi
 
-  local LOCATION="$SHARE/nvim-$VERSION"
+  local LOCATION="$SHARE/nvim-$BUILD"
 
   if [[ ! -d $LOCATION ]]; then
-    echo "Error: nvim-$VERSION is not installed."
+    echo "Error: nvim-$BUILD is not installed."
     # TODO: if requested build is not installed, prompt for install
     return 1
   fi
@@ -213,12 +213,12 @@ function _help_uninstall() {
 }
 
 function uninstall() {
-  local VERSION=${1:-}
+  local BUILD=${1:-}
 
   local ret=0
 
-  if [[ "$VERSION" != "stable" && "$VERSION" != "nightly" ]]; then
-    if ! [[ "$VERSION" =~ ^(help|-h|-help|--help)$ ]]; then
+  if [[ "$BUILD" != "stable" && "$BUILD" != "nightly" ]]; then
+    if ! [[ "$BUILD" =~ ^(help|-h|-help|--help)$ ]]; then
       echo "Error: invalid build"
       echo
       ret=1
@@ -227,23 +227,23 @@ function uninstall() {
     return "$ret"
   fi
 
-  local LOCATION="$SHARE/nvim-$VERSION"
+  local LOCATION="$SHARE/nvim-$BUILD"
 
   if [[ -d $LOCATION ]]; then
-    echo "Uninstalling $VERSION"
+    echo "Uninstalling $BUILD"
     rm -r "$LOCATION"
 
     if [[ "$(readlink -f "$ACTIVE")" == "$LOCATION" ]]; then
       echo "Unsetting active"
       rm "$ACTIVE"
 
-      # TODO: auto switch to other version (if installed)
+      # TODO: auto switch to other build (if installed)
     fi
 
     return 0
 
   else
-    echo "nvim-$VERSION not installed."
+    echo "nvim-$BUILD not installed."
     return 1
   fi
 
