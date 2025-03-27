@@ -3,6 +3,9 @@
 Simple CLI tool to install and switch between latest stable and nighly
 builds of Neovim.
 
+> [!NOTE]
+> Intended for use on Unix-like systems.
+
 ## Install
 
 Download the script and make sure it is available in `PATH`.
