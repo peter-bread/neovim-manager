@@ -36,4 +36,3 @@ neovim-manager uninstall stable
 ## Uninstall
 
 Simply delete the script.
-
