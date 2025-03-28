@@ -8,11 +8,19 @@ builds of Neovim.
 
 ## Install
 
-Download the script and make sure it is available in `PATH`.
+Download the script.
 
 ```sh
 wget https://raw.githubusercontent.com/peter-bread/neovim-manager/refs/heads/main/neovim-manager
 ```
+
+Make it executable:
+
+```sh
+chmod u+x neovim-manager
+```
+
+Make sure it is available in `PATH`.
 
 Common locations:
 
