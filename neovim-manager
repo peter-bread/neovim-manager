@@ -59,19 +59,21 @@ ARCH=$(get_arch)
 # Commands ---------------------------------------------------------------------
 
 function _help() {
-  echo "Manage Neovim installation."
-  echo
-  echo "Usage: neovim-manager <command> [<args>] [options]"
-  echo
-  echo "Commands:"
-  echo "  init        Set PATH accordingly"
-  echo "  install     Install a Neovim build"
-  echo "  use         Use a Neovim build"
-  echo "  uninstall   Uninstall a Neovim build"
-  echo "  help        Print this message"
-  echo
-  echo "Options:"
-  echo "  -h, -help, --help     Print this message"
+  cat <<EOF
+Manage Neovim installation.
+
+Usage: neovim-manager <command> [<args>] [options]
+
+Commands:
+  init        Set PATH accordingly
+  install     Install a Neovim build
+  use         Use a Neovim build
+  uninstall   Uninstall a Neovim build
+  help        Print this message
+
+Options:
+  -h, -help, --help     Print this message
+EOF
 }
 
 function _help_init() {
