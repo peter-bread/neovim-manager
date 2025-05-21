@@ -21,5 +21,5 @@ generate:
 
 # production ------------------------------------------------------------------
 
-build:
+build: validate
 	$(BASHLY) generate --env production
