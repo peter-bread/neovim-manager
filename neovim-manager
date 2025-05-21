@@ -295,11 +295,6 @@ function get_arch() {
 neovim_manager_init_command() {
 
   # src/init_command.sh
-  # echo "# This file is located at 'src/init_command.sh'."
-  # echo "# It contains the implementation for the 'neovim-manager init' command."
-  # echo "# The code you write here will be wrapped by a function named 'neovim_manager_init_command()'."
-  # echo "# Feel free to edit this file; your changes will persist when regenerating."
-  # inspect_args
 
   if ! [[ ":$PATH:" == *":${XDG_DATA_HOME:-$HOME/.local/share}/neovim-manager/builds/active/bin:"* ]]; then
     echo 'export PATH="${XDG_DATA_HOME:-$HOME/.local/share}/neovim-manager/builds/active/bin:$PATH"'
@@ -311,11 +306,6 @@ neovim_manager_init_command() {
 neovim_manager_install_command() {
 
   # src/install_command.sh
-  # echo "# This file is located at 'src/install_command.sh'."
-  # echo "# It contains the implementation for the 'neovim-manager install' command."
-  # echo "# The code you write here will be wrapped by a function named 'neovim_manager_install_command()'."
-  # echo "# Feel free to edit this file; your changes will persist when regenerating."
-  # inspect_args
 
   # system info
   os="$(get_os)"
@@ -350,11 +340,6 @@ neovim_manager_install_command() {
 neovim_manager_use_command() {
 
   # src/use_command.sh
-  # echo "# This file is located at 'src/use_command.sh'."
-  # echo "# It contains the implementation for the 'neovim-manager use' command."
-  # echo "# The code you write here will be wrapped by a function named 'neovim_manager_use_command()'."
-  # echo "# Feel free to edit this file; your changes will persist when regenerating."
-  # inspect_args
 
   build=${args[build]}
   location="$share/nvim-$build"
@@ -373,11 +358,6 @@ neovim_manager_use_command() {
 neovim_manager_uninstall_command() {
 
   # src/uninstall_command.sh
-  # echo "# This file is located at 'src/uninstall_command.sh'."
-  # echo "# It contains the implementation for the 'neovim-manager uninstall' command."
-  # echo "# The code you write here will be wrapped by a function named 'neovim_manager_uninstall_command()'."
-  # echo "# Feel free to edit this file; your changes will persist when regenerating."
-  # inspect_args
 
   build=${args[build]}
   location="$share/nvim-$build"
