@@ -393,14 +393,16 @@ neovim_manager_uninstall_command() {
   location="$share/nvim-$build"
 
   if [[ -d "$location" ]]; then
-    echo "Uninstalling nvim-$build"
+    notify "Uninstalling nvim-$build"
     rm -r "$location"
 
     # assumes $active is a valid symlink
     # TODO: verify that it actually exists
     if [[ "$(readlink -f "$active")" == "$location" ]]; then
-      echo "Unsetting active"
+      notify "Unsetting active"
       rm "$active"
+      notify "Warning: there is no longer an active build of Neovim"
+      notify "Be sure to set an active version with 'neovim-manager use [BUILD]'"
     fi
 
     return 0
