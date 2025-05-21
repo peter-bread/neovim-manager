@@ -1,4 +1,4 @@
-.PHONY: all validate generate build release
+.PHONY: all validate generate build docs release
 
 BASHLY = docker run \
 				 --rm \
