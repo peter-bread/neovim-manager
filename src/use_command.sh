@@ -5,6 +5,14 @@
 ## inspect_args
 
 build=${args[build]}
+
+if [[ "$build" == "none" ]]; then
+  if [[ -L "$active" ]]; then
+    rm "$active"
+  fi
+  return 0
+fi
+
 location="$share/nvim-$build"
 
 if [[ ! -d "$location" ]]; then

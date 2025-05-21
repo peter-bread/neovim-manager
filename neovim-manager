@@ -116,7 +116,7 @@ neovim_manager_use_usage() {
 
     printf "  %s\n" "BUILD"
     printf "\n"
-    printf "    %s\n" "Allowed: stable, nightly"
+    printf "    %s\n" "Allowed: stable, nightly, none"
     echo
 
     printf "%s\n" "Examples:"
@@ -279,6 +279,14 @@ neovim_manager_use_command() {
 
 
   build=${args[build]}
+
+  if [[ "$build" == "none" ]]; then
+    if [[ -L "$active" ]]; then
+      rm "$active"
+    fi
+    return 0
+  fi
+
   location="$share/nvim-$build"
 
   if [[ ! -d "$location" ]]; then
@@ -572,8 +580,8 @@ neovim_manager_use_parse_requirements() {
     exit 1
   fi
 
-  if [[ -n ${args['build']:-} ]] && [[ ! ${args['build']:-} =~ ^(stable|nightly)$ ]]; then
-    printf "%s\n" "build must be one of: stable, nightly" >&2
+  if [[ -n ${args['build']:-} ]] && [[ ! ${args['build']:-} =~ ^(stable|nightly|none)$ ]]; then
+    printf "%s\n" "build must be one of: stable, nightly, none" >&2
     exit 1
   fi
 

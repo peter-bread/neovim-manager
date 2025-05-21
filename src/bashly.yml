@@ -37,7 +37,7 @@ commands:
     args:
     - name: build
       required: true
-      allowed: [stable, nightly]
+      allowed: [stable, nightly, none]
 
     examples:
     - neovim-manager use stable
