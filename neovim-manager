@@ -147,7 +147,7 @@ neovim_manager_uninstall_usage() {
 
     printf "  %s\n" "BUILD"
     printf "\n"
-    printf "    %s\n" "Allowed: stable, nightly"
+    printf "    %s\n" "Allowed: stable, nightly, all"
     echo
 
     printf "%s\n" "Examples:"
@@ -310,6 +310,13 @@ neovim_manager_uninstall_command() {
 
 
   build=${args[build]}
+
+  if [[ "$build" == "all" ]]; then
+    "$0" uninstall stable || :
+    "$0" uninstall nightly || :
+    return 0
+  fi
+
   location="$share/nvim-$build"
 
   if [[ -d "$location" ]]; then
@@ -644,8 +651,8 @@ neovim_manager_uninstall_parse_requirements() {
     exit 1
   fi
 
-  if [[ -n ${args['build']:-} ]] && [[ ! ${args['build']:-} =~ ^(stable|nightly)$ ]]; then
-    printf "%s\n" "build must be one of: stable, nightly" >&2
+  if [[ -n ${args['build']:-} ]] && [[ ! ${args['build']:-} =~ ^(stable|nightly|all)$ ]]; then
+    printf "%s\n" "build must be one of: stable, nightly, all" >&2
     exit 1
   fi
 

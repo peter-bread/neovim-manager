@@ -5,6 +5,15 @@
 ## inspect_args
 
 build=${args[build]}
+
+# ignore errors
+# TODO: better error handling?
+if [[ "$build" == "all" ]]; then
+  "$0" uninstall stable || :
+  "$0" uninstall nightly || :
+  return 0
+fi
+
 location="$share/nvim-$build"
 
 if [[ -d "$location" ]]; then

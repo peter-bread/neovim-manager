@@ -50,7 +50,7 @@ commands:
     args:
     - name: build
       required: true
-      allowed: [stable, nightly]
+      allowed: [stable, nightly, all]
 
     examples:
     - neovim-manager uninstall stable
