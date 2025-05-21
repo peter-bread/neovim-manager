@@ -188,6 +188,11 @@ normalize_input() {
   done
 }
 
+confirm() {
+  read -rp "$1 [y/N] " response
+  [[ "$response" =~ ^[Yy]$ ]]
+}
+
 
 # usage: arch="$(get_arch)"
 function get_arch() {
@@ -298,8 +303,11 @@ neovim_manager_use_command() {
 
   if [[ ! -d "$location" ]]; then
     echo "Error: nvim-$build is not installed"
-    # TODO: prompt for install
-    return 1
+    if confirm "Would you like to install nvim-$build?"; then
+      "$0" install "$build"
+    else
+      return 1
+    fi
   fi
 
   ln -sfn "$location" "$active"
@@ -311,6 +319,8 @@ neovim_manager_uninstall_command() {
 
   build=${args[build]}
 
+  # ignore errors
+  # TODO: better error handling?
   if [[ "$build" == "all" ]]; then
     "$0" uninstall stable || :
     "$0" uninstall nightly || :
