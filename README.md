@@ -6,6 +6,12 @@ builds of Neovim.
 > [!NOTE]
 > Intended for use on Unix-like systems.
 
+## Requirements
+
+- `bash` 4.0 or higher
+- `wget`/`curl`
+- `tar`
+
 ## Install
 
 Download the script.
