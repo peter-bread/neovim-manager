@@ -25,7 +25,7 @@ neovim_manager_usage() {
   printf "  %s   Install a Neovim build\n" "install      "
   printf "  %s   Use a Neovim build\n" "use          "
   printf "  %s   Uninstall a Neovim build\n" "uninstall    "
-  printf "  %s   Uninstall neovim-manager and all its data\n" "self-destruct"
+  printf "  %s   Uninstall neovim-manager and all of its data\n" "self-destruct"
   echo
 
   if [[ -n "$long_usage" ]]; then
@@ -160,7 +160,7 @@ neovim_manager_uninstall_usage() {
 }
 
 neovim_manager_self_destruct_usage() {
-  printf "neovim-manager self-destruct - Uninstall neovim-manager and all its data\n\n"
+  printf "neovim-manager self-destruct - Uninstall neovim-manager and all of its data\n\n"
   printf "Alias: nuke\n"
   echo
 
@@ -173,7 +173,7 @@ neovim_manager_self_destruct_usage() {
     printf "%s\n" "Options:"
 
     printf "  %s\n" "--yes, -y"
-    printf "    Confirm you want to uninstall this software\n"
+    printf "    Confirm you want to uninstall this software without being prompted\n"
     echo
 
     printf "  %s\n" "--dry-run, -d"

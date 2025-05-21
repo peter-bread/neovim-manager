@@ -59,12 +59,12 @@ commands:
 
   - name: self-destruct
     alias: nuke
-    help: Uninstall neovim-manager and all its data
+    help: Uninstall neovim-manager and all of its data
 
     flags:
     - long: --yes
       short: -y
-      help: Confirm you want to uninstall this software
+      help: Confirm you want to uninstall this software without being prompted
 
     - long: --dry-run
       short: -d
