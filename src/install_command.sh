@@ -11,18 +11,26 @@ arch="$(get_arch)"
 # URL to fetch tarballs
 github_url="https://github.com/neovim/neovim/releases/download"
 
-
 build=${args[build]}
 format="tar.gz"
 name="nvim-$os-$arch"
 archive="$name.$format"
 location="$share/nvim-$build"
 
+http_client=${deps[http_client]}
+
 cd "$HOME"
 
-wget --quiet "$github_url/$build/$archive"
+case "$http_client" in
+  *wget)
+    "$http_client" --quiet "$github_url/$build/$archive"
+    ;;
+  *curl)
+    "$http_client" -sO "$github_url/$build/$archive"
+    ;;
+esac
 
-tar xzvf "$archive" &>/dev/null
+tar xzf "$archive" &>/dev/null
 
 mkdir -p "$share"
 

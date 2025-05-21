@@ -15,9 +15,9 @@ commands:
 
     dependencies:
       http_client:
-        command: [wget]
-      archive_tool:
-        command: [tar]
+        command: [wget, curl]
+        help: Install 'wget' or 'curl' via system package manager
+      tar: Install 'tar' via system package manager
 
     args:
     - name: build
