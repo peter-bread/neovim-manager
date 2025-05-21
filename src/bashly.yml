@@ -23,7 +23,7 @@ commands:
     - name: build
       required: false
       default: stable
-      allowed: [stable, nightly]
+      allowed: [stable, nightly, all]
 
     examples:
     - neovim-manager i

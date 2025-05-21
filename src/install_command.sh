@@ -12,6 +12,13 @@ arch="$(get_arch)"
 github_url="https://github.com/neovim/neovim/releases/download"
 
 build=${args[build]}
+
+if [[ "$build" == "all" ]]; then
+  "$0" install stable
+  "$0" install nightly
+  return 0
+fi
+
 format="tar.gz"
 name="nvim-$os-$arch"
 archive="$name.$format"
