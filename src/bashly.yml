@@ -2,6 +2,13 @@ name: neovim-manager
 help: Switch between stable and nightly Neovim releases easily
 version: 0.2.0
 
+x_mandoc_authors: Peter Sheehan
+x_mandoc_footer: |-
+  # ISSUE TRACKER
+  Report issues at <https://github.com/peter-bread/neovim-manager>
+x_mandoc_see_also:
+  - nvim
+
 commands:
   - name: init
     help: Set up PATH. Should be run in shell rc file
