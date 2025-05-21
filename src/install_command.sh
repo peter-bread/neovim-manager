@@ -12,30 +12,38 @@ arch="$(get_arch)"
 github_url="https://github.com/neovim/neovim/releases/download"
 
 build=${args[build]}
+quiet=${args[--quiet]:-0} # this is used by the `notify` function
 
 if [[ "$build" == "all" ]]; then
-  "$0" install stable
-  "$0" install nightly
+  extra_args=()
+  [[ "$quiet" == "1" ]] && extra_args+=(--quiet) # make sure --quiet persists
+  add_gap=1 "$0" install stable "${extra_args[@]}"
+  "$0" install nightly "${extra_args[@]}"
   return 0
 fi
 
 format="tar.gz"
 name="nvim-$os-$arch"
 archive="$name.$format"
+http_link="$github_url/$build/$archive"
 location="$share/nvim-$build"
 
 http_client=${deps[http_client]}
 
 cd "$HOME"
 
+notify "== Installing latest $build build of Neovim =="
+
+notify "Fetching $http_link"
+
 case "$http_client" in
-  *wget)
-    "$http_client" --quiet "$github_url/$build/$archive"
-    ;;
-  *curl)
-    "$http_client" -sO "$github_url/$build/$archive"
-    ;;
+  *wget) http_args="--quiet" ;;
+  *curl) http_args="-sO" ;;
 esac
+
+"$http_client" "$http_args" "$http_link"
+
+notify "Extracting $archive"
 
 tar xzf "$archive" &>/dev/null
 
@@ -43,6 +51,14 @@ mkdir -p "$share"
 
 [[ -d "$location" ]] && rm -r "$location"
 
+notify "Moving $name to $location"
+
 mv "$name" "$location"
 
+notify "Deleting $archive"
+
 rm "$archive"
+
+if [[ "${add_gap:-0}" -eq 1 ]]; then
+  notify
+fi

@@ -69,12 +69,16 @@ neovim_manager_install_usage() {
   echo
 
   printf "%s\n" "Usage:"
-  printf "  neovim-manager install [BUILD]\n"
+  printf "  neovim-manager install [BUILD] [OPTIONS]\n"
   printf "  neovim-manager install --help | -h\n"
   echo
 
   if [[ -n "$long_usage" ]]; then
     printf "%s\n" "Options:"
+
+    printf "  %s\n" "--quiet, -q"
+    printf "    Suppress non-error output\n"
+    echo
 
     printf "  %s\n" "--help, -h"
     printf "    Show this help\n"
@@ -264,6 +268,12 @@ function get_os() {
   esac
 }
 
+notify() {
+  if ! [[ "${quiet:-0}" -eq 1 ]]; then
+    echo "${1:-}"
+  fi
+}
+
 neovim_manager_init_command() {
 
 
@@ -284,30 +294,38 @@ neovim_manager_install_command() {
   github_url="https://github.com/neovim/neovim/releases/download"
 
   build=${args[build]}
+  quiet=${args[--quiet]:-0} # this is used by the `notify` function
 
   if [[ "$build" == "all" ]]; then
-    "$0" install stable
-    "$0" install nightly
+    extra_args=()
+    [[ "$quiet" == "1" ]] && extra_args+=(--quiet) # make sure --quiet persists
+    add_gap=1 "$0" install stable "${extra_args[@]}"
+    "$0" install nightly "${extra_args[@]}"
     return 0
   fi
 
   format="tar.gz"
   name="nvim-$os-$arch"
   archive="$name.$format"
+  http_link="$github_url/$build/$archive"
   location="$share/nvim-$build"
 
   http_client=${deps[http_client]}
 
   cd "$HOME"
 
+  notify "== Installing latest $build build of Neovim =="
+
+  notify "Fetching $http_link"
+
   case "$http_client" in
-    *wget)
-      "$http_client" --quiet "$github_url/$build/$archive"
-      ;;
-    *curl)
-      "$http_client" -sO "$github_url/$build/$archive"
-      ;;
+    *wget) http_args="--quiet" ;;
+    *curl) http_args="-sO" ;;
   esac
+
+  "$http_client" "$http_args" "$http_link"
+
+  notify "Extracting $archive"
 
   tar xzf "$archive" &>/dev/null
 
@@ -315,9 +333,17 @@ neovim_manager_install_command() {
 
   [[ -d "$location" ]] && rm -r "$location"
 
+  notify "Moving $name to $location"
+
   mv "$name" "$location"
 
+  notify "Deleting $archive"
+
   rm "$archive"
+
+  if [[ "${add_gap:-0}" -eq 1 ]]; then
+    notify
+  fi
 
 }
 
@@ -609,6 +635,12 @@ neovim_manager_install_parse_requirements() {
   while [[ $# -gt 0 ]]; do
     key="$1"
     case "$key" in
+
+      --quiet | -q)
+
+        args['--quiet']=1
+        shift
+        ;;
 
       -?*)
         printf "invalid option: %s\n" "$key" >&2

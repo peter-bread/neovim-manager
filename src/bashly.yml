@@ -25,6 +25,11 @@ commands:
       default: stable
       allowed: [stable, nightly, all]
 
+    flags:
+    - long: --quiet
+      short: -q
+      help: Suppress non-error output
+
     examples:
     - neovim-manager i
     - neovim manager install nightly
