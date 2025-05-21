@@ -251,6 +251,25 @@ inspect_args() {
 }
 
 # :command.user_lib
+# src/lib/get_arch.sh
+
+# usage: arch="$(get_arch)"
+function get_arch() {
+  local temp
+  temp=$(uname -m)
+
+  case "$temp" in
+    x86_64 | arm64)
+      echo "$temp"
+      return 0
+      ;;
+    *)
+      echo "unknown or not supported" >&2
+      return 1
+      ;;
+  esac
+}
+
 # src/lib/get_os.sh
 
 # usage: os="$(get_os)"
@@ -262,25 +281,6 @@ function get_os() {
       ;;
     *Darwin*)
       echo "macos"
-      return 0
-      ;;
-    *)
-      echo "unknown or not supported" >&2
-      return 1
-      ;;
-  esac
-}
-
-# src/lib/sample_function.sh
-
-# usage: arch="$(get_arch)"
-function get_arch() {
-  local temp
-  temp=$(uname -m)
-
-  case "$temp" in
-    x86_64 | arm64)
-      echo "$temp"
       return 0
       ;;
     *)
@@ -734,7 +734,7 @@ neovim_manager_uninstall_parse_requirements() {
 # :command.initialize
 initialize() {
   declare -g version="0.1.0"
-  set -e
+  set -euo pipefail
 
   # src/initialize.sh
   # tarballs extracted here
