@@ -14,8 +14,10 @@ commands:
     help: Install a Neovim build
 
     dependencies:
-    - tar
-    - wget
+      http_client:
+        command: [wget]
+      archive_tool:
+        command: [tar]
 
     args:
     - name: build

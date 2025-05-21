@@ -543,19 +543,19 @@ neovim_manager_install_parse_requirements() {
   # :command.dependencies_filter
   missing_deps=
   # :dependency.filter
-  if ! command -v tar >/dev/null 2>&1; then
-    printf "missing dependency: tar\n" >&2
+  if ! command -v wget >/dev/null 2>&1; then
+    printf "missing dependency: http_client\n" >&2
     missing_deps=1
   else
-    deps['tar']="$(command -v tar | head -n1)"
+    deps['http_client']="$(command -v wget | head -n1)"
   fi
 
   # :dependency.filter
-  if ! command -v wget >/dev/null 2>&1; then
-    printf "missing dependency: wget\n" >&2
+  if ! command -v tar >/dev/null 2>&1; then
+    printf "missing dependency: archive_tool\n" >&2
     missing_deps=1
   else
-    deps['wget']="$(command -v wget | head -n1)"
+    deps['archive_tool']="$(command -v tar | head -n1)"
   fi
 
   if [[ -n $missing_deps ]]; then
