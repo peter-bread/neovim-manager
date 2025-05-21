@@ -1,6 +1,6 @@
 # neovim-manager
 
-Simple CLI tool to install and switch between latest stable and nighly
+Simple CLI tool to install and switch between latest stable and nightly
 builds of Neovim.
 
 > [!NOTE]
