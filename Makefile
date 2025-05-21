@@ -1,4 +1,4 @@
-.PHONY: all validate generate build
+.PHONY: all validate generate build release
 
 BASHLY = docker run \
 				 --rm \
@@ -23,3 +23,12 @@ generate:
 
 build: validate
 	$(BASHLY) generate --env production
+
+
+# release ---------------------------------------------------------------------
+
+docs:
+	$(BASHLY) render :mandoc docs/man
+	$(BASHLY) render :markdown docs/md
+
+release: build docs
