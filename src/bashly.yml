@@ -13,6 +13,10 @@ commands:
     alias: i
     help: Install a Neovim build
 
+    dependencies:
+    - tar
+    - wget
+
     args:
     - name: build
       required: false

@@ -540,6 +540,28 @@ neovim_manager_install_parse_requirements() {
     esac
   done
 
+  # :command.dependencies_filter
+  missing_deps=
+  # :dependency.filter
+  if ! command -v tar >/dev/null 2>&1; then
+    printf "missing dependency: tar\n" >&2
+    missing_deps=1
+  else
+    deps['tar']="$(command -v tar | head -n1)"
+  fi
+
+  # :dependency.filter
+  if ! command -v wget >/dev/null 2>&1; then
+    printf "missing dependency: wget\n" >&2
+    missing_deps=1
+  else
+    deps['wget']="$(command -v wget | head -n1)"
+  fi
+
+  if [[ -n $missing_deps ]]; then
+    exit 1
+  fi
+
   # :command.command_filter
   action="install"
 
