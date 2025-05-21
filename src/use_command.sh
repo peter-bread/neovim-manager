@@ -18,10 +18,13 @@ location="$share/nvim-$build"
 if [[ ! -d "$location" ]]; then
   echo "Error: nvim-$build is not installed"
   if confirm "Would you like to install nvim-$build?"; then
-    "$0" install "$build"
+    notify
+    add_gap=1 "$0" install "$build"
   else
     return 1
   fi
 fi
 
 ln -sfn "$location" "$active"
+
+notify "Using nvim-$build"
