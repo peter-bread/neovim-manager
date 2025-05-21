@@ -1,6 +1,6 @@
 name: neovim-manager
 help: Switch between stable and nightly Neovim releases easily
-version: 0.1.0
+version: 0.2.0
 
 commands:
   - name: init
@@ -55,3 +55,21 @@ commands:
     examples:
     - neovim-manager uninstall stable
     - neovim manager rm nightly
+
+
+  - name: self-destruct
+    alias: nuke
+    help: Uninstall neovim-manager and all its data
+
+    flags:
+    - long: --yes
+      short: -y
+      help: Confirm you want to uninstall this software
+
+    - long: --dry-run
+      short: -d
+      help: Print what would happen without actually doing it
+
+    examples:
+    - neovim-manager self-destruct
+    - neovim-manager nuke -y

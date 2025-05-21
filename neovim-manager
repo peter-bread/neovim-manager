@@ -21,10 +21,11 @@ neovim_manager_usage() {
   echo
 
   printf "%s\n" "Commands:"
-  printf "  %s   Set up PATH. Should be run in shell rc file\n" "init     "
-  printf "  %s   Install a Neovim build\n" "install  "
-  printf "  %s   Use a Neovim build\n" "use      "
-  printf "  %s   Uninstall a Neovim build\n" "uninstall"
+  printf "  %s   Set up PATH. Should be run in shell rc file\n" "init         "
+  printf "  %s   Install a Neovim build\n" "install      "
+  printf "  %s   Use a Neovim build\n" "use          "
+  printf "  %s   Uninstall a Neovim build\n" "uninstall    "
+  printf "  %s   Uninstall neovim-manager and all its data\n" "self-destruct"
   echo
 
   if [[ -n "$long_usage" ]]; then
@@ -153,6 +154,39 @@ neovim_manager_uninstall_usage() {
     printf "%s\n" "Examples:"
     printf "  neovim-manager uninstall stable\n"
     printf "  neovim manager rm nightly\n"
+    echo
+
+  fi
+}
+
+neovim_manager_self_destruct_usage() {
+  printf "neovim-manager self-destruct - Uninstall neovim-manager and all its data\n\n"
+  printf "Alias: nuke\n"
+  echo
+
+  printf "%s\n" "Usage:"
+  printf "  neovim-manager self-destruct [OPTIONS]\n"
+  printf "  neovim-manager self-destruct --help | -h\n"
+  echo
+
+  if [[ -n "$long_usage" ]]; then
+    printf "%s\n" "Options:"
+
+    printf "  %s\n" "--yes, -y"
+    printf "    Confirm you want to uninstall this software\n"
+    echo
+
+    printf "  %s\n" "--dry-run, -d"
+    printf "    Print what would happen without actually doing it\n"
+    echo
+
+    printf "  %s\n" "--help, -h"
+    printf "    Show this help\n"
+    echo
+
+    printf "%s\n" "Examples:"
+    printf "  neovim-manager self-destruct\n"
+    printf "  neovim-manager nuke -y\n"
     echo
 
   fi
@@ -349,6 +383,50 @@ neovim_manager_uninstall_command() {
 
 }
 
+neovim_manager_self_destruct_command() {
+
+
+
+  yes=${args[--yes]:-0}
+  dry_run=${args[--dry-run]:-0}
+
+  if ! [[ "$(command -v -- "$0")" == /* ]]; then
+    echo "Error: cannot delete local development script"
+    return 1
+  fi
+
+  function self_destruct() {
+    "$0" uninstall all
+    rmdir "$share"
+    rm -- "$0"
+  }
+
+  function self_destruct_dry_run() {
+    echo "$0 uninstall all"
+    echo "rmdir $share"
+    echo "rm -- $0"
+  }
+
+  function maybe_self_destruct() {
+    if [[ "$dry_run" -eq 1 ]]; then
+      self_destruct_dry_run
+    else
+      self_destruct
+    fi
+  }
+
+  if [[ "$yes" -eq 1 ]]; then
+    maybe_self_destruct
+  else
+    if confirm "Are you sure you want to uninstall neovim-manager?"; then
+      maybe_self_destruct
+    else
+      return 1
+    fi
+  fi
+
+}
+
 parse_requirements() {
 
   while [[ $# -gt 0 ]]; do
@@ -402,6 +480,13 @@ parse_requirements() {
       action="uninstall"
       shift
       neovim_manager_uninstall_parse_requirements "$@"
+      shift $#
+      ;;
+
+    self-destruct | nuke)
+      action="self-destruct"
+      shift
+      neovim_manager_self_destruct_parse_requirements "$@"
       shift $#
       ;;
 
@@ -668,8 +753,61 @@ neovim_manager_uninstall_parse_requirements() {
 
 }
 
+neovim_manager_self_destruct_parse_requirements() {
+
+  while [[ $# -gt 0 ]]; do
+    key="$1"
+    case "$key" in
+      --help | -h)
+        long_usage=yes
+        neovim_manager_self_destruct_usage
+        exit
+        ;;
+
+      *)
+        break
+        ;;
+
+    esac
+  done
+
+  action="self-destruct"
+
+  while [[ $# -gt 0 ]]; do
+    key="$1"
+    case "$key" in
+
+      --yes | -y)
+
+        args['--yes']=1
+        shift
+        ;;
+
+      --dry-run | -d)
+
+        args['--dry-run']=1
+        shift
+        ;;
+
+      -?*)
+        printf "invalid option: %s\n" "$key" >&2
+        exit 1
+        ;;
+
+      *)
+
+        printf "invalid argument: %s\n" "$key" >&2
+        exit 1
+
+        ;;
+
+    esac
+  done
+
+}
+
 initialize() {
-  declare -g version="0.1.0"
+  declare -g version="0.2.0"
   set -euo pipefail
 
   # tarballs extracted here
@@ -696,6 +834,7 @@ run() {
     "install") neovim_manager_install_command ;;
     "use") neovim_manager_use_command ;;
     "uninstall") neovim_manager_uninstall_command ;;
+    "self-destruct") neovim_manager_self_destruct_command ;;
   esac
 }
 
