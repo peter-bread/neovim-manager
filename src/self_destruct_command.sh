@@ -13,6 +13,18 @@ if ! [[ "$(command -v -- "$0")" == /* ]]; then
   return 1
 fi
 
+# TODO: handle needing sudo to delete from /usr/local/bin
+
+# TODO: check for manpages in /usr/share/man and $HOME/.local/share/man
+
+# USE_SUDO=""
+#
+# if [[ "$(command -v -- "$0")" == /usr/* ]]; then
+#   USE_SUDO="sudo"
+# fi
+
+# TODO: check $share exists before attempting to delete
+
 function self_destruct() {
   "$0" uninstall all
   rmdir "$share"
