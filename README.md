@@ -14,28 +14,32 @@ builds of Neovim.
 
 ## Install
 
-Download the script.
+Installation of script and manpages to `$HOME/.local/bin` and
+`$HOME/.local/share/man` respectively. (no `sudo`):
 
 ```sh
-wget https://raw.githubusercontent.com/peter-bread/neovim-manager/refs/heads/main/neovim-manager
-```
-
-Make it executable:
-
-```sh
-chmod u+x neovim-manager
-```
-
-Make sure it is available in `PATH`.
-
-Common locations:
-
-```sh
-mv neovim-manager ~/.local/bin
+curl -sSfL https://raw.githubusercontent.com/peter-bread/neovim-manager/refs/heads/main/scripts/install | bash
 ```
 
 ```sh
-sudo mv neovim-manager /usr/local/bin
+wget -qO- https://raw.githubusercontent.com/peter-bread/neovim-manager/refs/heads/main/scripts/install | bash
+```
+
+### Options
+
+Set these variables to anything non-zero to enable them:
+
+- `MINIMAL`: only install script; no manpages
+- `SYSTEM_WIDE`: install to `/usr/local/bin` and `/usr/share/man` (needs `sudo`)
+
+https://raw.githubusercontent.com/peter-bread/neovim-manager/refs/heads/main/scripts/install
+
+```sh
+MINIMAL=1 SYSTEM_WIDE=1 bash <(curl -sSfL https://raw.githubusercontent.com/peter-bread/neovim-manager/refs/heads/main/scripts/install)
+```
+
+```sh
+MINIMAL=1 SYSTEM_WIDE=1 bash <(wget -qO- https://raw.githubusercontent.com/peter-bread/neovim-manager/refs/heads/main/scripts/install)
 ```
 
 ## Usage
