@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -euxo pipefail # remove -x when done
+set -euo pipefail
 
 MINIMAL="${MINIMAL:-0}" # assume minimal=false, i.e. full installation
 SYSTEM_WIDE="${SYSTEM_WIDE:-0}" # assume system-wide=false, i.e. user-local installation
