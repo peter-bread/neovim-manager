@@ -8,17 +8,21 @@ SYSTEM_WIDE="${SYSTEM_WIDE:-0}" # assume system-wide=false, i.e. user-local inst
 INSTALL_DIR="$HOME/.local/bin"
 USE_SUDO=""
 
+MAN_DIR="$HOME/.local/share/man"
+
 TMP_DIR=$(mktemp -d)
 trap 'rm -rf "$TMP_DIR"' EXIT
 
 SCRIPT_NAME="neovim-manager"
 SCRIPT_URL="https://raw.githubusercontent.com/peter-bread/neovim-manager/refs/heads/main/$SCRIPT_NAME"
 
-# MAN_DIR="$HOME/.local/share/man" # this is for full installation
+GITHUB_URL="https://github.com/peter-bread/neovim-manager"
 
 if [[ "$SYSTEM_WIDE" -ne 0 ]]; then
   INSTALL_DIR="/usr/local/bin"
   USE_SUDO="sudo"
+
+  MAN_DIR="/usr/share/man"
 fi
 
 if [[ "$MINIMAL" -ne 0 ]]; then
@@ -42,5 +46,33 @@ if [[ "$MINIMAL" -ne 0 ]]; then
   "${CMD[@]}"
 
 else
-  echo "TODO: implement full installation logic"
+  # install the script and manpages
+
+  if ! command -v git &>/dev/null; then
+    echo "Error: Full installation requires git."
+    exit 1
+  fi
+
+  git clone --depth=1 "$GITHUB_URL" "$TMP_DIR/repo"
+
+  CMD=()
+  [[ -n "$USE_SUDO" ]] && CMD+=("$USE_SUDO")
+  CMD+=("cp" "$TMP_DIR/repo/$SCRIPT_NAME" "$INSTALL_DIR")
+
+  "${CMD[@]}"
+
+  for manpage in "$TMP_DIR/repo/docs/man/"*.[1]; do
+    [[ -e "$manpage" ]] || continue
+    section="${manpage##*.}"
+    dest_dir="$MAN_DIR/man$section"
+    mkdir -p "$dest_dir"
+
+    CMD=()
+    [[ -n "$USE_SUDO" ]] && CMD+=("$USE_SUDO")
+    CMD+=("cp" "$manpage" "$dest_dir/")
+
+    "${CMD[@]}"
+
+  done
+
 fi
