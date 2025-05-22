@@ -1,5 +1,13 @@
 # neovim-manager
 
+> [!WARNING]
+> This is still in active development.
+>
+> It should not be considered stable until v1.0.0.
+>
+> Methods for installing, updating and uninstalling this software ***WILL***
+> be changing.
+
 Simple CLI tool to install and switch between latest stable and nightly
 builds of Neovim.
 
