@@ -57,7 +57,7 @@ neovim_manager_init_usage() {
     echo
 
     printf "%s\n" "Examples:"
-    printf "  eval \"\$(neovim-manager init)\"\n"
+    printf "  eval \"$(neovim-manager init)\"\n"
     echo
 
   fi

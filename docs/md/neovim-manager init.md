@@ -11,7 +11,7 @@ neovim-manager init
 ## Examples
 
 ```bash
-eval "\$(neovim-manager init)"
+eval "$(neovim-manager init)"
 ```
 
 

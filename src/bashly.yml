@@ -14,7 +14,7 @@ commands:
     help: Set up PATH. Should be run in shell rc file
 
     examples:
-    - eval "\$(neovim-manager init)"
+    - 'eval "$(neovim-manager init)"'
 
   - name: install
     alias: i

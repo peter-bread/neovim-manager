@@ -22,7 +22,7 @@ EXAMPLES
 ==================================================
 
 ~~~
-eval "\$(neovim-manager init)"
+eval "$(neovim-manager init)"
 
 ~~~
 
