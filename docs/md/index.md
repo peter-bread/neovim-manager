@@ -14,10 +14,10 @@ neovim-manager COMMAND
 
 ## Commands
 
-- [init](neovim-manager%20init) - Set up PATH. Should be run in shell rc file
-- [install](neovim-manager%20install) - Install a Neovim build
-- [use](neovim-manager%20use) - Use a Neovim build
-- [uninstall](neovim-manager%20uninstall) - Uninstall a Neovim build
-- [self-destruct](neovim-manager%20self-destruct) - Uninstall neovim-manager and all of its data
+- [init](neovim-manager%20init.md) - Set up PATH. Should be run in shell rc file
+- [install](neovim-manager%20install.md) - Install a Neovim build
+- [use](neovim-manager%20use.md) - Use a Neovim build
+- [uninstall](neovim-manager%20uninstall.md) - Uninstall a Neovim build
+- [self-destruct](neovim-manager%20self-destruct.md) - Uninstall neovim-manager and all of its data
 
 
