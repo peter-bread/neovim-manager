@@ -30,9 +30,14 @@ location="$share/nvim-$build"
 
 http_client=${deps[http_client]}
 
-cd "$HOME"
-
 notify "== Installing latest $build build of Neovim =="
+
+notify "Creating temporary directory"
+
+TMP_DIR=$(mktemp -d)
+trap 'cd "$HOME"; rm -rf "$TMP_DIR"' EXIT
+
+cd "$TMP_DIR"
 
 notify "Fetching $http_link"
 
