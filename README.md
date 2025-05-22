@@ -73,7 +73,11 @@ neovim-manager uninstall stable
 
 ## Uninstall
 
-Run `neovim-manager self-destruct`.
+Run:
+
+```sh
+neovim-manager self-destruct
+```
 
 ## Under the Hood
 
