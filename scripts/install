@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+set -euxo pipefail # remove -x when done
+
+MINIMAL="${MINIMAL:-0}" # assume minimal=false, i.e. full installation
+SYSTEM_WIDE="${SYSTEM_WIDE:-0}" # assume system-wide=false, i.e. user-local installation
+
+INSTALL_DIR="$HOME/.local/bin"
+USE_SUDO=""
+
+TMP_DIR=$(mktemp -d)
+trap 'rm -rf "$TMP_DIR"' EXIT
+
+SCRIPT_NAME="neovim-manager"
+SCRIPT_URL="https://raw.githubusercontent.com/peter-bread/neovim-manager/refs/heads/main/$SCRIPT_NAME"
+
+# MAN_DIR="$HOME/.local/share/man" # this is for full installation
+
+if [[ "$SYSTEM_WIDE" -ne 0 ]]; then
+  INSTALL_DIR="/usr/local/bin"
+  USE_SUDO="sudo"
+fi
+
+if [[ "$MINIMAL" -ne 0 ]]; then
+  # install just the script itself
+
+  if command -v wget &>/dev/null; then
+    wget -qO "$TMP_DIR/$SCRIPT_NAME" "$SCRIPT_URL"
+  elif command -v curl &>/dev/null; then
+    curl -fsSL "$SCRIPT_URL" -o "$TMP_DIR/$SCRIPT_NAME"
+  else
+    echo "Error: Neither wget nor curl is installed" >&2
+    exit 1
+  fi
+
+  chmod u+x "$TMP_DIR/$SCRIPT_NAME"
+
+  CMD=()
+  [[ -n "$USE_SUDO" ]] && CMD+=("$USE_SUDO")
+  CMD+=("mv" "$TMP_DIR/$SCRIPT_NAME" "$INSTALL_DIR")
+
+  "${CMD[@]}"
+
+else
+  echo "TODO: implement full installation logic"
+fi
