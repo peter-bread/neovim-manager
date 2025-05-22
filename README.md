@@ -14,6 +14,11 @@ builds of Neovim.
 
 ## Install
 
+> [!TIP]
+> Always check scripts before running them.
+> See [here](https://raw.githubusercontent.com/peter-bread/neovim-manager/refs/heads/main/scripts/install)
+> to see the installation script for this software.
+
 Installation of script and manpages to `$HOME/.local/bin` and
 `$HOME/.local/share/man` respectively. (no `sudo`):
 
@@ -31,8 +36,6 @@ Set these variables to anything non-zero to enable them:
 
 - `MINIMAL`: only install script; no manpages
 - `SYSTEM_WIDE`: install to `/usr/local/bin` and `/usr/share/man` (needs `sudo`)
-
-https://raw.githubusercontent.com/peter-bread/neovim-manager/refs/heads/main/scripts/install
 
 ```sh
 MINIMAL=1 SYSTEM_WIDE=1 bash <(curl -sSfL https://raw.githubusercontent.com/peter-bread/neovim-manager/refs/heads/main/scripts/install)
