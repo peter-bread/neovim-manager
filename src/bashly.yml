@@ -1,3 +1,4 @@
+---
 name: neovim-manager
 help: Switch between stable and nightly Neovim releases easily
 version: 0.3.0
@@ -14,7 +15,7 @@ commands:
     help: Set up PATH. Should be run in shell rc file
 
     examples:
-    - 'eval "$(neovim-manager init)"'
+      - 'eval "$(neovim-manager init)"'
 
   - name: install
     alias: i
@@ -27,43 +28,41 @@ commands:
       tar: Install 'tar' via system package manager
 
     args:
-    - name: build
-      required: false
-      default: stable
-      allowed: [stable, nightly, all]
+      - name: build
+        required: false
+        default: stable
+        allowed: [stable, nightly, all]
 
     flags:
-    - long: --quiet
-      short: -q
-      help: Suppress non-error output
+      - long: --quiet
+        short: -q
+        help: Suppress non-error output
 
     examples:
-    - neovim-manager i
-    - neovim manager install nightly
-
+      - neovim-manager i
+      - neovim manager install nightly
 
   - name: use
     alias: u
     help: Use a Neovim build
 
     args:
-    - name: build
-      required: true
-      allowed: [stable, nightly, none]
+      - name: build
+        required: true
+        allowed: [stable, nightly, none]
 
     examples:
-    - neovim-manager use stable
-
+      - neovim-manager use stable
 
   - name: uninstall
     alias: [rm, remove]
     help: Uninstall a Neovim build
 
     args:
-    - name: build
-      required: true
-      allowed: [stable, nightly, all]
+      - name: build
+        required: true
+        allowed: [stable, nightly, all]
 
     examples:
-    - neovim-manager uninstall stable
-    - neovim manager rm nightly
+      - neovim-manager uninstall stable
+      - neovim manager rm nightly
